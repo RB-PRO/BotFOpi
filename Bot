@@ -1,0 +1,58 @@
+{$CLEO}
+0000: NOP
+repeat
+wait 100
+until samp.Available()
+0AF8: samp add_message_to_chat "{00bfff}[ BOT ]: Àâòîð:{ff7f24} RB_PRO." color 0x1874cd
+0B34: samp register_client_command "cmd" to_label @cmd
+// Thank Kewa_Opcode & DarkP1xelóé
+while true
+wait 0
+    if 31@ == 1
+    then
+    0C72: set_virtual_key 0x57 down true 
+    0@ = 0.0 // X
+    1@ = 0.0 // Y
+    2@ = 0.0 // Z
+    0AB1: call_scm_func @mq 3 0@ 1@ 2@ 
+    end
+end
+
+:cmd
+0B12: 31@ = 31@ XOR 1
+if 31@ == 1 
+then
+0ACD: show_text_highpriority "~g~CLEO is ~r~ON~n~~w~Author:~p~ ~>~RB_PRO~<~" time 3000
+else
+0ACD: show_text_highpriority "~g~CLEO is ~r~OFF~n~~w~Author:~p~ ~>~RB_PRO~<~" time 3000
+end
+samp.CmdRet()
+
+// ************************* Call_scm
+
+:mq
+0087: 10@ = 0@ // (float)
+0087: 11@ = 1@ // (float)
+0087: 12@ = 2@ // (float)
+while 29@ == 0
+00A0: store_actor $PLAYER_ACTOR position_to 2@ 3@ 4@ 
+0087: 4@ = 0@ 
+0063: 4@ -= 2@ 
+0087: 5@ = 1@ 
+0063: 5@ -= 3@ 
+0087: 6@ = 5@ 
+0073: 6@ /= 4@ 
+0C08: math 6@ = arctangent 6@ 
+if 0031: 4@ >= 0.0 
+then 000B: 6@ += 3.14 
+end 
+0A25: set_camera_on_players_X_angle 0.0 Z_angle 6@ 
+actor.StorePos($PLAYER_ACTOR, 14@, 15@, 16@)
+050A: 21@ = distance_between_XYZ 14@ 15@ 16@ and_XYZ 10@ 11@ 12@
+wait 0
+    if 21@ < 1.0
+    then
+    29@ = 1
+    end
+end
+0AB2: ret 0
